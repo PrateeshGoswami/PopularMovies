@@ -1,11 +1,13 @@
 package com.example.home.popularmovies;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by home on 10/25/2015.
  */
-public class Movie {
+public class Movie implements Parcelable{
 
     private String originalTitle;
     private String synopsis;
@@ -26,6 +28,14 @@ public class Movie {
         this.rating = rating;
         this.releaseDate = releaseDate;
         this.posterURL = posterURL;
+    }
+    protected Movie(Parcel parcel ){
+        id = parcel.readString();
+        originalTitle = parcel.readString();
+        synopsis = parcel.readString();
+        rating = parcel.readString();
+        releaseDate = parcel.readString();
+        posterURL = parcel.readString();
     }
 
     public String getDuration() { return duration; }
@@ -77,5 +87,32 @@ public class Movie {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(originalTitle);
+        dest.writeString(synopsis);
+        dest.writeString(rating);
+        dest.writeString(releaseDate);
+        dest.writeString(posterURL);
+
+    }
+    static final Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }
 
