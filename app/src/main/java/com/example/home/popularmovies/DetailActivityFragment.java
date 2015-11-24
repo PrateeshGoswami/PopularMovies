@@ -33,6 +33,7 @@ public class DetailActivityFragment extends Fragment {
     private void getMovieInfo(String movieID) {
         MovieDetailFetchTask movieInfoTask = new MovieDetailFetchTask(this);
         movieInfoTask.execute(movieID);
+
     }
 
     @Override
@@ -46,6 +47,7 @@ public class DetailActivityFragment extends Fragment {
             getMovieInfo(movieID);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

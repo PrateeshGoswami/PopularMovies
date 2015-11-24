@@ -64,7 +64,7 @@ public class MovieDetailFetchTask extends AsyncTask<String, Void, Movie> {
     }
 
     @Override
-    protected void onPostExecute(Movie result) {
+    public void onPostExecute(Movie result) {
         if (result != null) {
             String releaseDate = result.getReleaseDate();
             int separatorIndex = releaseDate.indexOf('-');

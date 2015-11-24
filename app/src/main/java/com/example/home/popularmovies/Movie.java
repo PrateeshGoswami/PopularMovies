@@ -103,7 +103,7 @@ public class Movie implements Parcelable{
         dest.writeString(posterURL);
 
     }
-    static final Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+    static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel parcel) {
             return new Movie(parcel);
