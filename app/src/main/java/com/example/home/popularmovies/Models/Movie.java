@@ -1,4 +1,4 @@
-package com.example.home.popularmovies;
+package com.example.home.popularmovies.Models;
 
 import android.graphics.Bitmap;
 import android.os.Parcel;
@@ -7,7 +7,7 @@ import android.os.Parcelable;
 /**
  * Created by home on 10/25/2015.
  */
-public class Movie implements Parcelable{
+public class Movie implements Parcelable {
 
     private String originalTitle;
     private String synopsis;
@@ -19,9 +19,11 @@ public class Movie implements Parcelable{
 
     private Bitmap posterImage;
 
-    public Movie() {}
+    public Movie() {
+    }
+
     public Movie(String id, String originalTitle, String posterURL, String synopsis,
-                 String rating, String releaseDate){
+                 String rating, String releaseDate) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.synopsis = synopsis;
@@ -29,7 +31,8 @@ public class Movie implements Parcelable{
         this.releaseDate = releaseDate;
         this.posterURL = posterURL;
     }
-    protected Movie(Parcel parcel ){
+
+    protected Movie(Parcel parcel) {
         id = parcel.readString();
         originalTitle = parcel.readString();
         synopsis = parcel.readString();
@@ -38,17 +41,29 @@ public class Movie implements Parcelable{
         posterURL = parcel.readString();
     }
 
-    public String getDuration() { return duration; }
+    public String getDuration() {
+        return duration;
+    }
 
-    public void setDuration(String duration) { this.duration = duration; }
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
-    public Bitmap getPosterImage() { return posterImage; }
+    public Bitmap getPosterImage() {
+        return posterImage;
+    }
 
-    public void setPosterImage(Bitmap posterImage) { this.posterImage = posterImage; }
+    public void setPosterImage(Bitmap posterImage) {
+        this.posterImage = posterImage;
+    }
 
-    public String getId() {  return id; }
+    public String getId() {
+        return id;
+    }
 
-    public void setId(String id) { this.id = id;}
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setPosterURL(String posterURL) {
         this.posterURL = posterURL;
@@ -62,7 +77,9 @@ public class Movie implements Parcelable{
         this.synopsis = synopsis;
     }
 
-    public String getPosterURL() { return posterURL; }
+    public String getPosterURL() {
+        return posterURL;
+    }
 
     public String getOriginalTitle() {
         return originalTitle;
@@ -103,6 +120,7 @@ public class Movie implements Parcelable{
         dest.writeString(posterURL);
 
     }
+
     static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel parcel) {

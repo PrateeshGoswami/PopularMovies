@@ -21,5 +21,6 @@
     <string name="pref_movie_sorting_key">movie_sorting_key</string>
     <string name="pref_movie_sorting_default">popularity.desc</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="review_trailor">trailers,reviews</string>
 
 </resources>

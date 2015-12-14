@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.home.popularmovies.DetailActivityFragment;
-import com.example.home.popularmovies.Movie;
+import com.example.home.popularmovies.Models.Movie;
 import com.example.home.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
@@ -22,11 +22,11 @@ import java.net.URL;
 /**
  * Created by home on 11/15/2015.
  */
-public class MovieDetailFetchTask extends AsyncTask<String, Void, Movie> {
+public class FetchDetailsTask extends AsyncTask<String, Void, Movie> {
     private DetailActivityFragment detailActivityFragment;
-    private final String LOG_TAG = MovieDetailFetchTask.class.getSimpleName();
+    private final String LOG_TAG = FetchDetailsTask.class.getSimpleName();
 
-    public MovieDetailFetchTask(DetailActivityFragment detailActivityFragment) {
+    public FetchDetailsTask(DetailActivityFragment detailActivityFragment) {
         this.detailActivityFragment = detailActivityFragment;
     }
 
@@ -63,22 +63,6 @@ public class MovieDetailFetchTask extends AsyncTask<String, Void, Movie> {
         return movie;
     }
 
-    @Override
-    public void onPostExecute(Movie result) {
-        if (result != null) {
-            String releaseDate = result.getReleaseDate();
-            int separatorIndex = releaseDate.indexOf('-');
-            String releaseYear = releaseDate.substring(0, separatorIndex);
-
-            detailActivityFragment.mTitleTextView.setText(result.getOriginalTitle());
-            detailActivityFragment.mReleaseYearTextView.setText(releaseYear);
-            detailActivityFragment.mDurationTextView.setText(result.getDuration() + "min");
-            detailActivityFragment.mRatingsTextView.setText(result.getRating() + "/10.0");
-            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
-            detailActivityFragment.mPosterImageTextView.setImageBitmap(result.getPosterImage());
-            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
-        }
-    }
 
     @Override
     protected Movie doInBackground(String... params) {
@@ -108,6 +92,7 @@ public class MovieDetailFetchTask extends AsyncTask<String, Void, Movie> {
                     .build();
 
             URL url = new URL(builtUri.toString());
+            Log.v(LOG_TAG, "BuiltURI Json string: " + url);
 
             // Create the request to themoviedb, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -163,4 +148,21 @@ public class MovieDetailFetchTask extends AsyncTask<String, Void, Movie> {
         }
         return null;
     }
+    @Override
+    public void onPostExecute(Movie result) {
+        if (result != null) {
+            String releaseDate = result.getReleaseDate();
+            int separatorIndex = releaseDate.indexOf('-');
+            String releaseYear = releaseDate.substring(0, separatorIndex);
+
+            detailActivityFragment.mTitleTextView.setText(result.getOriginalTitle());
+            detailActivityFragment.mReleaseYearTextView.setText(releaseYear);
+            detailActivityFragment.mDurationTextView.setText(result.getDuration() + "min");
+            detailActivityFragment.mRatingsTextView.setText(result.getRating() + "/10.0");
+            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
+            detailActivityFragment.mPosterImageTextView.setImageBitmap(result.getPosterImage());
+            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
+        }
+    }
+
 }
