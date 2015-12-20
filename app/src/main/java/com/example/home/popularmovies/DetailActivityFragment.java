@@ -10,25 +10,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.home.popularmovies.Adapters.ReviewsAdapter;
 import com.example.home.popularmovies.Models.MovieReview;
 import com.example.home.popularmovies.fetchingData.FetchDetailsTask;
 import com.example.home.popularmovies.fetchingData.FetchReviewsTask;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
 
 import me.grantland.widget.AutofitTextView;
 
+//import com.example.home.popularmovies.Adapters.ReviewsAdapter;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
-    public LinearLayout myLInearLayout;
     public TextView textViewForReviews;
     public TextView textViewFortrailers;
 
 
-    public ReviewsAdapter reviewsAdapter;
+//    public ReviewsAdapter reviewsAdapter;
     public ArrayList<MovieReview> reviewList;
 
 
@@ -38,8 +39,10 @@ public class DetailActivityFragment extends Fragment {
     public TextView mReleaseYearTextView;
     public TextView mDurationTextView;
     public TextView mRatingsTextView;
-    public TextView mOverviewTextView;
+    public ExpandableTextView mOverviewTextView;
     public ImageView mPosterImageTextView;
+    public LinearLayout mLinearLayout;
+
     public TextView mReviewerTextView;
     public TextView mReviewTextView;
 
@@ -75,10 +78,10 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 //        set the reviewAdapter
-        reviewsAdapter = new ReviewsAdapter(
-                getActivity(),
-                reviewList
-        );
+//        reviewsAdapter = new ReviewsAdapter(
+//                getActivity(),
+//                reviewList
+//        );
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
@@ -97,7 +100,8 @@ public class DetailActivityFragment extends Fragment {
         mDurationTextView = (TextView) rootView.findViewById(R.id.durationTextView);
         mRatingsTextView = (TextView) rootView.findViewById(R.id.ratingsTextView);
         mPosterImageTextView = (ImageView) rootView.findViewById(R.id.posterImageView);
-        mOverviewTextView = (TextView) rootView.findViewById(R.id.overviewTextView);
+        mOverviewTextView = (ExpandableTextView) rootView.findViewById(R.id.expand_text_view);
+        mLinearLayout = (LinearLayout)rootView.findViewById(R.id.containerForReviews);
 
 
 //        mOverviewTextView.setMovementMethod(new ScrollingMovementMethod());

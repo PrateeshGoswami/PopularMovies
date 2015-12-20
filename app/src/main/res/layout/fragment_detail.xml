@@ -1,23 +1,26 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
         android:orientation="vertical">
+
         <me.grantland.widget.AutofitTextView
+            android:id="@+id/titleTextView"
             android:layout_width="fill_parent"
             android:layout_height="100dp"
-            android:id="@+id/titleTextView"
             android:background="#009587"
-            android:textColor="#ffffff"
-            android:singleLine="false"
-            android:maxLines="2"
-            android:textSize="40sp"
             android:gravity="center_vertical"
-            android:paddingLeft="15dp" />
+            android:maxLines="2"
+            android:paddingLeft="15dp"
+            android:singleLine="false"
+            android:textColor="#ffffff"
+            android:textSize="40sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,128 +29,135 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="150dp"
-            android:id="@+id/posterImageView"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="27dp"
-            android:layout_below="@+id/titleTextView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp" />
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/posterImageView"
+                android:layout_width="120dp"
+                android:layout_height="150dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/titleTextView"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="27dp"
+                android:layout_marginTop="10dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/yearOfReleaseTextView"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            android:layout_marginTop="10dp" />
+                <TextView
+                    android:id="@+id/yearOfReleaseTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/durationTextView"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            android:layout_marginTop="10dp"
-            android:textStyle="bold|italic"
-            android:textSize="25sp" />
+                <TextView
+                    android:id="@+id/durationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="25sp"
+                    android:textStyle="bold|italic" />
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/ratingsTextView"
-            android:layout_below="@+id/durationTextView"
-            android:layout_alignLeft="@+id/durationTextView"
-            android:layout_alignStart="@+id/durationTextView"
-            android:layout_marginTop="11dp"
-            android:textColor="#000000" />
-        </LinearLayout>
-                        <CheckBox
+                <TextView
+                    android:id="@+id/ratingsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/durationTextView"
+                    android:layout_alignStart="@+id/durationTextView"
+                    android:layout_below="@+id/durationTextView"
+                    android:layout_marginTop="11dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <CheckBox
                 android:id="@+id/star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:paddingRight="10dp"
-                android:checked="false"
                 android:button="@drawable/star"
+                android:checked="false"
                 android:contentDescription="@string/description_star"
-                />
-                <!--<Button-->
-                    <!--android:id="@+id/playTrailer"-->
-                    <!--android:layout_width="40dp"-->
-                    <!--android:layout_height="40dp"-->
-                    <!--android:layout_gravity="bottom"-->
-                    <!--android:paddingRight="10dp"-->
-                    <!--android:onClick="playTrailer"-->
-                    <!--android:background="@drawable/play_trailer"/>-->
+                android:paddingRight="10dp" />
+            <!--<Button-->
+            <!--android:id="@+id/playTrailer"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:paddingRight="10dp"-->
+            <!--android:onClick="playTrailer"-->
+            <!--android:background="@drawable/play_trailer"/>-->
 
         </LinearLayout>
-        <TextView
 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/overviewTextView"
-
-            android:layout_marginTop="0dp"
-            android:layout_marginLeft="18.5dp"
-            android:layout_marginRight="18.5dp" />
-
-        <TextView
-            android:id="@+id/synopsis_view"
+        <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/expand_text_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
-            android:textAppearance="?android:textAppearanceSmall"/>
+            android:layout_height="wrap_content"
+            expandableTextView:animDuration="200"
+            expandableTextView:maxCollapsedLines="4">
+
+            <TextView
+                android:id="@id/expandable_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="#666666"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@id/expand_collapse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent" />
+        </com.ms.square.android.expandabletextview.ExpandableTextView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_margin="5dp"
-            android:background="?android:attr/listDivider"
-            />
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:id="@+id/reviews_header_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/reviews_header"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="20sp" />
 
 
         <LinearLayout
             android:id="@+id/containerForReviews"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
+            android:orientation="vertical"></LinearLayout>
+
         <TextView
             android:id="@+id/reviews_trailer_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/trailers_header"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <LinearLayout
             android:id="@+id/containerForTrailers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
+            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
 

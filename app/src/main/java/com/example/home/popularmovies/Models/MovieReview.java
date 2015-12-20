@@ -10,12 +10,10 @@ public class MovieReview implements Parcelable {
     public String strReviewer;
    public String strReview;
 
-    public MovieReview() {
-    }
 
-    public MovieReview(String strReviewer, String strReview) {
-        strReviewer = this.strReviewer;
-        strReview = this.strReview;
+    public MovieReview(String stReviewer,String stReview) {
+        stReviewer = this.strReviewer;
+        stReview = this.strReview;
     }
 
     protected MovieReview(Parcel parcel) {

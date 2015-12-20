@@ -1,12 +1,17 @@
 package com.example.home.popularmovies.fetchingData;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.home.popularmovies.DetailActivityFragment;
 import com.example.home.popularmovies.Models.MovieReview;
 import com.example.home.popularmovies.R;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,42 +38,47 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
     }
 
     private ArrayList<MovieReview> getReviewDataFromJSon(String movieReviewJsonStr)
-            throws JSONException, IOException {
+            throws JSONException{
 //        extract reviewer and review and number of reviews
 
         final String RESULTS = "results";
+        final String REV = "reviews";
         final String REVIEWER = "author";
         final String REVIEW = "content";
 
         JSONObject reviewJson = new JSONObject(movieReviewJsonStr);
-        JSONArray reviewArray = reviewJson.getJSONArray(RESULTS);
+        JSONObject rev = reviewJson.getJSONObject(REV);
+        JSONArray reviewArray = rev.getJSONArray(RESULTS);
 
         ArrayList<MovieReview> reviewList = new ArrayList<>();
 
         for (int i = 0; i < reviewArray.length(); i++) {
             JSONObject review = reviewArray.getJSONObject(i);
-            String strReviewer = review.getString(REVIEWER);
-            String strReview = review.getString(REVIEW);
+            String sReviewer = review.getString(REVIEWER);
+            String sReview = review.getString(REVIEW);
 
             // only add the movie with a review
-            if (review.getString(REVIEW) != null) {
-    reviewList.add(new MovieReview(strReviewer,strReview));
+            if (review.getString(REVIEWER) != null) {
+                MovieReview movieReview = new MovieReview(sReviewer,sReview);
+                movieReview.setStrReviewer(sReviewer);
+                movieReview.setStrReview(sReview);
+                reviewList.add(movieReview);
             }
         }
 
         return reviewList;
     }
 
-private String getTotalNoofReviews(String movieReviewJsonStr)
-throws JSONException,IOException{
-    final String REVIEWS = "reviews";
-    final String TOTAL_RESULTS = "total_results";
+    private String getTotalNoofReviews(String movieReviewJsonStr)
+            throws JSONException, IOException {
+        final String REVIEWS = "reviews";
+        final String TOTAL_RESULTS = "total_results";
 
-    JSONObject root = new JSONObject(movieReviewJsonStr);
-    JSONObject count = root.getJSONObject(REVIEWS);
-    String total = count.getString(TOTAL_RESULTS);
-    return total;
-}
+        JSONObject root = new JSONObject(movieReviewJsonStr);
+        JSONObject count = root.getJSONObject(REVIEWS);
+        String total = count.getString(TOTAL_RESULTS);
+        return total;
+    }
 
 
     @Override
@@ -90,12 +100,12 @@ throws JSONException,IOException{
             final String MOVIEDB_BASE_URL =
                     "http://api.themoviedb.org/3/movie";
             final String API_KEY_PARAM = "api_key";
-            final String REVIEW_TRAILOR_PARAM ="append_to_response";
+            final String REVIEW_TRAILOR_PARAM = "append_to_response";
 
             Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                     .appendPath(MOVIE_ID)
                     .appendQueryParameter(API_KEY_PARAM, detailActivityFragment.getString(R.string.api_key))
-                    .appendQueryParameter(REVIEW_TRAILOR_PARAM,detailActivityFragment.getString(R.string.review_trailor))
+                    .appendQueryParameter(REVIEW_TRAILOR_PARAM, detailActivityFragment.getString(R.string.review_trailor))
                     .build();
 //            build the url
             URL url = new URL(builtUri.toString());
@@ -125,7 +135,7 @@ throws JSONException,IOException{
                 return null;
             }
             movieReviewJsonStr = buffer.toString();
-                     Log.v(LOG_TAG, "REVIEWS Json string: "+ movieReviewJsonStr);
+//            Log.v(LOG_TAG, "REVIEWS Json string: " + movieReviewJsonStr);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -135,14 +145,16 @@ throws JSONException,IOException{
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
-            }if (reader != null) {
+            }
+            if (reader != null) {
                 try {
                     reader.close();
                 } catch (final IOException e) {
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
-        }try {
+        }
+        try {
             return getReviewDataFromJSon(movieReviewJsonStr);
         } catch (Exception ex) {
             Log.e(LOG_TAG, ex.getMessage(), ex);
@@ -151,11 +163,21 @@ throws JSONException,IOException{
 
         return null;
     }
-//
+
+    //
     @Override
     protected void onPostExecute(ArrayList<MovieReview> results) {
-        if(results != null){
-            for (MovieReview movieReview : results){
+        if (results != null) {
+            LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
+                    getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            for (MovieReview movieReview : results) {
+                View view = inflater.inflate(R.layout.list_item_movie_review,null);
+                TextView textView = (TextView) view.findViewById(R.id.list_item_reviewer_text);
+                textView.setText(movieReview.getStrReviewer());
+                ExpandableTextView textView1 = (ExpandableTextView)view.findViewById(R.id.expand_text_view);
+                textView1.setText(movieReview.getStrReview());
+                detailActivityFragment.mLinearLayout.addView(view);
 
 //this is where I'm having problem I'm unable to inflate a linearlayout
 //                inside which I want to add textviews dynamically,
@@ -164,7 +186,7 @@ throws JSONException,IOException{
 //
             }
 
-            }
         }
     }
+}
 
