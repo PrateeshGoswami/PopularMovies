@@ -1,11 +1,13 @@
 package com.example.home.popularmovies;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.example.home.popularmovies.Models.MovieReview;
 import com.example.home.popularmovies.fetchingData.FetchDetailsTask;
 import com.example.home.popularmovies.fetchingData.FetchReviewsTask;
+import com.example.home.popularmovies.fetchingData.FetchTrailersTask;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
@@ -42,9 +45,8 @@ public class DetailActivityFragment extends Fragment {
     public ExpandableTextView mOverviewTextView;
     public ImageView mPosterImageTextView;
     public LinearLayout mLinearLayout;
+    public LinearLayout tLinearLayout;
 
-    public TextView mReviewerTextView;
-    public TextView mReviewTextView;
 
     public DetailActivityFragment() {
     }
@@ -59,6 +61,10 @@ public class DetailActivityFragment extends Fragment {
         FetchReviewsTask reviewTask = new FetchReviewsTask(this);
         reviewTask.execute(movieID);
     }
+    private void getTrailers(String movieID){
+        FetchTrailersTask trailersTask = new FetchTrailersTask(this);
+        trailersTask.execute(movieID);
+    }
 
     @Override
     public void onStart() {
@@ -70,29 +76,15 @@ public class DetailActivityFragment extends Fragment {
             String movieID = intent.getStringExtra(Intent.EXTRA_TEXT);
             getMovieInfo(movieID);
             getReviews(movieID);
+            getTrailers(movieID);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-//        set the reviewAdapter
-//        reviewsAdapter = new ReviewsAdapter(
-//                getActivity(),
-//                reviewList
-//        );
-
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-//        to play the trailer
-//        Button play = (Button)rootView.findViewById(R.id.playTrailer);
-//        play.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=ZiS7akYy4yA")));
-//            }
-//        });
 
 
         mTitleTextView = (AutofitTextView) rootView.findViewById(R.id.titleTextView);
@@ -102,27 +94,8 @@ public class DetailActivityFragment extends Fragment {
         mPosterImageTextView = (ImageView) rootView.findViewById(R.id.posterImageView);
         mOverviewTextView = (ExpandableTextView) rootView.findViewById(R.id.expand_text_view);
         mLinearLayout = (LinearLayout)rootView.findViewById(R.id.containerForReviews);
+        tLinearLayout = (LinearLayout)rootView.findViewById(R.id.containerForTrailers);
 
-
-//        mOverviewTextView.setMovementMethod(new ScrollingMovementMethod());
-
-//        we need some textViews for reviews
-//        add layout
-//        myLInearLayout = (LinearLayout) rootView.findViewById(R.id.containerForReviews);
-//add layout params
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT);
-//        myLInearLayout.setOrientation(LinearLayout.VERTICAL);
-
-//add textview
-//        for (int count = 0;count < 4;count++) {
-//            textViewForReviews = new TextView(getContext());
-//            textViewForReviews.setText("reviews will go here" + count);
-//            textViewForReviews.setId(count + 5);
-//            textViewForReviews.setLayoutParams(params);
-//            myLInearLayout.addView(textViewForReviews);
-//        }
 
         return rootView;
     }

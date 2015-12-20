@@ -50,9 +50,11 @@ public class MovieReview implements Parcelable {
 
     }
 
-    static final Parcelable.Creator<MovieReview> CREATOR = new Parcelable.Creator<MovieReview>() {
+    static final Parcelable.Creator<MovieReview> CREATOR =
+            new Parcelable.Creator<MovieReview>() {
         @Override
         public MovieReview createFromParcel(Parcel parcel) {
+
             return new MovieReview(parcel);
         }
 

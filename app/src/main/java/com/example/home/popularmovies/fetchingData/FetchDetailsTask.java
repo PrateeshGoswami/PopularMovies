@@ -92,7 +92,7 @@ public class FetchDetailsTask extends AsyncTask<String, Void, Movie> {
                     .build();
 
             URL url = new URL(builtUri.toString());
-            Log.v(LOG_TAG, "BuiltURI Json string: " + url);
+//            Log.v(LOG_TAG, "BuiltURI Json string: " + url);
 
             // Create the request to themoviedb, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();

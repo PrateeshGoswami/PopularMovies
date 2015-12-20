@@ -69,16 +69,6 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
         return reviewList;
     }
 
-    private String getTotalNoofReviews(String movieReviewJsonStr)
-            throws JSONException, IOException {
-        final String REVIEWS = "reviews";
-        final String TOTAL_RESULTS = "total_results";
-
-        JSONObject root = new JSONObject(movieReviewJsonStr);
-        JSONObject count = root.getJSONObject(REVIEWS);
-        String total = count.getString(TOTAL_RESULTS);
-        return total;
-    }
 
 
     @Override
@@ -167,9 +157,10 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
     //
     @Override
     protected void onPostExecute(ArrayList<MovieReview> results) {
-        if (results != null) {
-            LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
-                    getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
+                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if (results != null && !results.isEmpty()) {
 
             for (MovieReview movieReview : results) {
                 View view = inflater.inflate(R.layout.list_item_movie_review,null);
@@ -179,13 +170,13 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
                 textView1.setText(movieReview.getStrReview());
                 detailActivityFragment.mLinearLayout.addView(view);
 
-//this is where I'm having problem I'm unable to inflate a linearlayout
-//                inside which I want to add textviews dynamically,
-//                the number of textviews will be same as the number of reviews
-//                after I'm done with reviews I will to do same for the trailers
-//
-            }
+           }
 
+        }else {
+            View view = inflater.inflate(R.layout.list_item_movie_review,null);
+            TextView textView = (TextView)view.findViewById(R.id.list_item_reviewer_text);
+            textView.setText("Sorry no reviews for this movie  :( ");
+            detailActivityFragment.mLinearLayout.addView(view);
         }
     }
 }
