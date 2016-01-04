@@ -1,4 +1,4 @@
-package com.example.home.popularmovies;
+package com.example.home.popularmovies.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +14,7 @@ import android.widget.GridView;
 
 import com.example.home.popularmovies.Adapters.MoviesAdapter;
 import com.example.home.popularmovies.Models.Movie;
+import com.example.home.popularmovies.R;
 import com.example.home.popularmovies.fetchingData.FetchMoviesTask;
 
 import java.util.ArrayList;

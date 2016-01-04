@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.home.popularmovies.DetailActivityFragment;
+import com.example.home.popularmovies.Activities.DetailActivityFragment;
 import com.example.home.popularmovies.Models.Trailer;
 import com.example.home.popularmovies.R;
 
@@ -60,7 +60,7 @@ public class FetchTrailersTask extends AsyncTask<String,Void,ArrayList<Trailer>>
                 Trailer trailer = new Trailer(trName,trSource);
                 trailer.setTrailerName(trName);
                 trailer.setTrailerSource(trSource);
-                Log.v(LOG_TAG,"Trailer name :" + trSource);
+//                Log.v(LOG_TAG, "Trailer name :" + trSource);
                 trailerList.add(trailer);
             }
         }
@@ -151,6 +151,7 @@ public class FetchTrailersTask extends AsyncTask<String,Void,ArrayList<Trailer>>
 
     @Override
     protected void onPostExecute(ArrayList<Trailer> results) {
+        detailActivityFragment.tLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
                 getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -180,8 +181,11 @@ public class FetchTrailersTask extends AsyncTask<String,Void,ArrayList<Trailer>>
             View view = inflater.inflate(R.layout.list_item_movie_trailer,null);
             TextView textView = (TextView)view.findViewById(R.id.list_item_trailer_name);
             textView.setText("Sorry no trailers for this movie  :( ");
+            ImageView imageView = (ImageView)view.findViewById(R.id.imgPlay);
+            imageView.setVisibility(view.GONE);
             detailActivityFragment.tLinearLayout.addView(view);
         }
+
 
     }
 }

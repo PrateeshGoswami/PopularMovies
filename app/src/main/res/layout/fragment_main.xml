@@ -10,16 +10,17 @@
         android:horizontalSpacing="0dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp"
-        android:layout_gravity="center_horizontal|bottom"></GridView>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="137dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminate="true"
-        android:id="@+id/progressBar"
-        android:layout_gravity="center_horizontal|top" />
+        android:verticalSpacing="0dp"
+        android:layout_gravity="center_horizontal|center"></GridView>
+
+    <!--<ProgressBar-->
+        <!--style="?android:attr/progressBarStyleHorizontal"-->
+        <!--android:layout_width="137dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="gone"-->
+        <!--android:indeterminate="true"-->
+        <!--android:id="@+id/progressBar"-->
+        <!--android:layout_gravity="center_horizontal|top" />-->
 
 </FrameLayout>

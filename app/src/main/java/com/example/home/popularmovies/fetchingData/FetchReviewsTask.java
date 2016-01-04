@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.home.popularmovies.DetailActivityFragment;
+import com.example.home.popularmovies.Activities.DetailActivityFragment;
 import com.example.home.popularmovies.Models.MovieReview;
 import com.example.home.popularmovies.R;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
@@ -157,6 +157,7 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
     //
     @Override
     protected void onPostExecute(ArrayList<MovieReview> results) {
+        detailActivityFragment.mLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
                 getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -178,6 +179,8 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
             textView.setText("Sorry no reviews for this movie  :( ");
             detailActivityFragment.mLinearLayout.addView(view);
         }
+
     }
+
 }
 
