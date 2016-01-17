@@ -14,17 +14,17 @@
 
     <fragment
         android:id="@+id/fragment_main"
-        android:name="com.example.home.popularmovies.Activities.MainActivityFragment"
+        android:name="com.example.home.popularmovies.Fragments.MainActivityFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1.25"
+        android:layout_weight="1"
         tools:layout="@layout/fragment_main" />
 
     <FrameLayout
         android:id="@+id/movie_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.75">
+        android:layout_weight="1">
 
     </FrameLayout>
 </LinearLayout>

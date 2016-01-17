@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.home.popularmovies.Activities.DetailActivityFragment;
+import com.example.home.popularmovies.Fragments.DetailActivityFragment;
 import com.example.home.popularmovies.Models.MovieReview;
 import com.example.home.popularmovies.R;
 import com.ms.square.android.expandabletextview.ExpandableTextView;

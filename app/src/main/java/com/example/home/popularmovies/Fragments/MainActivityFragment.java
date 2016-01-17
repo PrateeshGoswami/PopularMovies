@@ -1,6 +1,5 @@
-package com.example.home.popularmovies.Activities;
+package com.example.home.popularmovies.Fragments;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
+
 
     public MoviesAdapter moviesAdapter;
     private ArrayList<Movie> moviesList;
@@ -80,21 +80,20 @@ public class MainActivityFragment extends Fragment {
 
         GridView gridView = (GridView) view.findViewById(R.id.movies_grid);
         gridView.setAdapter(moviesAdapter);
-//        downloadMoviesProgress = (ProgressBar) view.findViewById(R.id.progressBar);
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = (Movie) parent.getItemAtPosition(position);
                 String movieID = movie.getId();
-                Intent otherIntent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, movieID);
+                ((Callback)getActivity()).onItemSelected(movieID);
 
-                startActivity(otherIntent);
             }
         });
 
         return view;
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -102,7 +101,10 @@ public class MainActivityFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    //on the background thread fetch the data from the moviedb.org
+    public interface Callback
+    {
+        public void onItemSelected(String movieID);
+    }
 
 }
 

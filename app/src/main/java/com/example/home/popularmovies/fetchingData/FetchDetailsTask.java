@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.home.popularmovies.Activities.DetailActivityFragment;
+import com.example.home.popularmovies.Fragments.DetailActivityFragment;
 import com.example.home.popularmovies.Models.Movie;
 import com.example.home.popularmovies.R;
 import com.squareup.picasso.Picasso;

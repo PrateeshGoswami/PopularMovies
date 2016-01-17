@@ -6,7 +6,7 @@
     <GridView
         android:id="@+id/movies_grid"
         android:layout_width="wrap_content"
-        android:layout_height="503dp"
+        android:layout_height="match_parent"
         android:horizontalSpacing="0dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"

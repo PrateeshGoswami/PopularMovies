@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.home.popularmovies.Fragments.DetailActivityFragment;
+import com.example.home.popularmovies.Fragments.MainActivityFragment;
 import com.example.home.popularmovies.R;
 import com.facebook.stetho.Stetho;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
     private static final String DETAILFRAGMENT_TAG = "DTAG";
 
     private boolean mTwoPane;
@@ -19,17 +21,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if(findViewById(R.id.movie_detail_container) != null){
-//            mTwoPane = true;
-//            if(savedInstanceState == null ){
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.movie_detail_container,new DetailActivityFragment(),DETAILFRAGMENT_TAG)
-//                        .commit();
-//            }
-//
-//        }else {
-//            mTwoPane = false;
-//        }
+        if(findViewById(R.id.movie_detail_container) != null){
+            mTwoPane = true;
+            if(savedInstanceState == null ){
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container,new DetailActivityFragment(),DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+
+        }else {
+            mTwoPane = false;
+        }
 
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
@@ -62,5 +64,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(String movieID) {
+
+
+        if(mTwoPane){
+            Bundle args = new Bundle();
+            args.putString("movieid",movieID);
+            DetailActivityFragment fragment = new DetailActivityFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container,fragment).commit();
+
+
+        }else {
+            Intent otherIntent = new Intent(this, DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, movieID);
+            startActivity(otherIntent);
+
+        }
+
     }
 }

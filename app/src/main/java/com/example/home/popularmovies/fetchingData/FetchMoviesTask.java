@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.home.popularmovies.Activities.MainActivityFragment;
+import com.example.home.popularmovies.Fragments.MainActivityFragment;
 import com.example.home.popularmovies.Models.Movie;
 import com.example.home.popularmovies.R;
 
