@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.home.popularmovies.R;
+import com.example.home.popularmovies.SaveMovieId;
 import com.example.home.popularmovies.fetchingData.FetchDetailsTask;
 import com.example.home.popularmovies.fetchingData.FetchReviewsTask;
 import com.example.home.popularmovies.fetchingData.FetchTrailersTask;
@@ -25,6 +27,7 @@ import me.grantland.widget.AutofitTextView;
  */
 public class DetailActivityFragment extends Fragment {
     private String movieID;
+
 
 
     @Override
@@ -95,6 +98,8 @@ public class DetailActivityFragment extends Fragment {
 
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -118,11 +123,26 @@ public class DetailActivityFragment extends Fragment {
 
         updateForTwoPane(movieID);
 
+        Button button = (Button)rootView.findViewById(R.id.favButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((SaveMovieId)getActivity()).onFavBtnClicked(movieID);
+            }
+                    });
+
+
 
         return rootView;
 
+
     }
 
+
+//    public interface SaveMovieId{
+//        public void onFavBtnClicked(String movieID);
+//    }
 
 }
 

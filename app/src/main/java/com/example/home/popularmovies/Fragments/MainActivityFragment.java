@@ -26,11 +26,6 @@ public class MainActivityFragment extends Fragment {
 
     public MoviesAdapter moviesAdapter;
     private ArrayList<Movie> moviesList;
-    //  if the internet speed is low user can see a progress bar
-//    ProgressBar downloadMoviesProgress;
-//
-//    private int counter = 0;
-//    private int calculatedProgress = 0;
 
 
     @Override
@@ -56,6 +51,7 @@ public class MainActivityFragment extends Fragment {
                 getString(R.string.pref_movie_sorting_default));
 
         fetchMovieTask.execute(sortingOrder);
+
     }
 
     //on start movie list will be updated

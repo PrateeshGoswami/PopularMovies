@@ -1,18 +1,27 @@
 package com.example.home.popularmovies.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.home.popularmovies.Fragments.DetailActivityFragment;
 import com.example.home.popularmovies.Fragments.MainActivityFragment;
 import com.example.home.popularmovies.R;
+import com.example.home.popularmovies.SaveMovieId;
 import com.facebook.stetho.Stetho;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback ,SaveMovieId {
     private static final String DETAILFRAGMENT_TAG = "DTAG";
+    ArrayList<String> movieIdList = new ArrayList<String>();
+
+
 
     private boolean mTwoPane;
 
@@ -86,6 +95,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             startActivity(otherIntent);
 
         }
+
+    }
+
+    @Override
+    public void onFavBtnClicked(String movieID) {
+
+            Log.v("Movieid", movieID);
+            if (movieIdList.contains(movieID)) {
+                Toast.makeText(MainActivity.this, "This Movie is already your favourite !!! =)",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                movieIdList.add(movieID);
+            }
+            SharedPreferences sharedPreferences =
+                    MainActivity.this.getSharedPreferences("movieIdData", 0);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            for (int i = 0; i < movieIdList.size(); i++) {
+
+                editor.putString("Status_" + i, movieIdList.get(i));
+
+
+            }
+            editor.commit();
 
     }
 }

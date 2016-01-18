@@ -5,8 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.home.popularmovies.Fragments.DetailActivityFragment;
 import com.example.home.popularmovies.R;
+import com.example.home.popularmovies.SaveMovieId;
 
-public class DetailActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class DetailActivity extends AppCompatActivity implements SaveMovieId{
+    DetailActivityFragment detailActivityFragment;
+    ArrayList<String> movieIdList = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,5 +25,16 @@ public class DetailActivity extends AppCompatActivity {
                     .commit();
 
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onFavBtnClicked(String movieID) {
+
     }
 }
