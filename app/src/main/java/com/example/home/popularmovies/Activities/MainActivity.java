@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     @Override
     public void onFavBtnClicked(String movieID) {
+        if(mTwoPane) {
 
             Log.v("Movieid", movieID);
             if (movieIdList.contains(movieID)) {
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                 movieIdList.add(movieID);
             }
             SharedPreferences sharedPreferences =
-                    MainActivity.this.getSharedPreferences("movieIdData", 0);
+                    MainActivity.this.getSharedPreferences("Data", 0);
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -120,6 +121,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
             }
             editor.commit();
+        }else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("favmovieId",movieID);
+        }
 
     }
 }

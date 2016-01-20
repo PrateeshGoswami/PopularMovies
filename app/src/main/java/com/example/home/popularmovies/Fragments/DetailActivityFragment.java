@@ -1,6 +1,8 @@
 package com.example.home.popularmovies.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.home.popularmovies.R;
 import com.example.home.popularmovies.SaveMovieId;
@@ -17,6 +20,8 @@ import com.example.home.popularmovies.fetchingData.FetchDetailsTask;
 import com.example.home.popularmovies.fetchingData.FetchReviewsTask;
 import com.example.home.popularmovies.fetchingData.FetchTrailersTask;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+
+import java.util.ArrayList;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -27,6 +32,10 @@ import me.grantland.widget.AutofitTextView;
  */
 public class DetailActivityFragment extends Fragment {
     private String movieID;
+    private String favMovieid;
+    ArrayList<String> favmovieIdList = new ArrayList<String>();
+    Activity activity = getActivity();
+
 
 
 
@@ -96,9 +105,15 @@ public class DetailActivityFragment extends Fragment {
         updatedetailFragment();
 
 
+
     }
 
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +121,10 @@ public class DetailActivityFragment extends Fragment {
         Bundle arguments = getArguments();
         if(arguments != null){
             movieID = arguments.getString("movieid");
+//            favourite movie comes back from detail activity
+            favMovieid = arguments.getString("favMovieId");
         }
+
 
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
@@ -123,22 +141,60 @@ public class DetailActivityFragment extends Fragment {
 
         updateForTwoPane(movieID);
 
+
+//  here when the mark favourite button is clicked
+// the movie Id passes through the SaveMovieId interface
+// to main activity
+
         Button button = (Button)rootView.findViewById(R.id.favButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                ((SaveMovieId)getActivity()).onFavBtnClicked(movieID);
+                ((SaveMovieId) getActivity()).onFavBtnClicked(movieID);
             }
-                    });
+        });
+
+//        it comes back on line number 125
+//        then its added to an arrayList favmovieIdList
+//
+
+        if (favmovieIdList.contains(favMovieid)){
+            Toast.makeText(activity, "this is already a favourite ", Toast.LENGTH_SHORT).show();
+
+
+        }else {
+            favmovieIdList.add(favMovieid);
+        }
+//            each item of favmovieIdlist is added to the shared pref
+
+
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("favMovieData", 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            for (int i = 0; i < favmovieIdList.size(); i++) {
+
+                editor.putString("Status_" + i, favmovieIdList.get(i));
+
+
+
+            editor.commit();
+        }
 
 
 
         return rootView;
 
 
+
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
 
 //    public interface SaveMovieId{
 //        public void onFavBtnClicked(String movieID);
