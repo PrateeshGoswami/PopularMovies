@@ -1,17 +1,13 @@
 package com.example.home.popularmovies.fetchingData;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.example.home.popularmovies.Fragments.DetailActivityFragment;
 import com.example.home.popularmovies.Models.MovieReview;
+import com.example.home.popularmovies.OnReviewDataLoadListener;
 import com.example.home.popularmovies.R;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +28,11 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
 
     private DetailActivityFragment detailActivityFragment;
     private final String LOG_TAG = FetchDetailsTask.class.getSimpleName();
+
+    private OnReviewDataLoadListener listener;
+    public void setOnDataLoadFinished(OnReviewDataLoadListener listener){
+        this.listener = listener;
+    }
 
     public FetchReviewsTask(DetailActivityFragment detailActivityFragment) {
         this.detailActivityFragment = detailActivityFragment;
@@ -157,28 +158,34 @@ public class FetchReviewsTask extends AsyncTask<String, Void, ArrayList<MovieRev
     //
     @Override
     protected void onPostExecute(ArrayList<MovieReview> results) {
-        detailActivityFragment.mLinearLayout.removeAllViews();
-        LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
-                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        if (results != null && !results.isEmpty()) {
-
-            for (MovieReview movieReview : results) {
-                View view = inflater.inflate(R.layout.list_item_movie_review,null);
-                TextView textView = (TextView) view.findViewById(R.id.list_item_reviewer_text);
-                textView.setText(movieReview.getStrReviewer());
-                ExpandableTextView textView1 = (ExpandableTextView)view.findViewById(R.id.expand_text_view);
-                textView1.setText(movieReview.getStrReview());
-                detailActivityFragment.mLinearLayout.addView(view);
-
-           }
-
-        }else {
-            View view = inflater.inflate(R.layout.list_item_movie_review,null);
-            TextView textView = (TextView)view.findViewById(R.id.list_item_reviewer_text);
-            textView.setText("Sorry no reviews for this movie  :( ");
-            detailActivityFragment.mLinearLayout.addView(view);
+        if (results != null) {
+            listener.onDataReady(results);
         }
+
+
+
+//        detailActivityFragment.mLinearLayout.removeAllViews();
+//        LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
+//                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//
+//        if (results != null && !results.isEmpty()) {
+//
+//            for (MovieReview movieReview : results) {
+//                View view = inflater.inflate(R.layout.list_item_movie_review,null);
+//                TextView textView = (TextView) view.findViewById(R.id.list_item_reviewer_text);
+//                textView.setText(movieReview.getStrReviewer());
+//                ExpandableTextView textView1 = (ExpandableTextView)view.findViewById(R.id.expand_text_view);
+//                textView1.setText(movieReview.getStrReview());
+//                detailActivityFragment.mLinearLayout.addView(view);
+//
+//           }
+//
+//        }else {
+//            View view = inflater.inflate(R.layout.list_item_movie_review,null);
+//            TextView textView = (TextView)view.findViewById(R.id.list_item_reviewer_text);
+//            textView.setText("Sorry no reviews for this movie  :( ");
+//            detailActivityFragment.mLinearLayout.addView(view);
+//        }
 
     }
 

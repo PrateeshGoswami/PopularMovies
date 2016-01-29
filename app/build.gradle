@@ -34,4 +34,8 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.ms-square:expandableTextView:0.1.4'
     compile 'com.facebook.stetho:stetho:1.1.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+
+
 }

@@ -1,17 +1,12 @@
 package com.example.home.popularmovies.fetchingData;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.home.popularmovies.Fragments.DetailActivityFragment;
 import com.example.home.popularmovies.Models.Trailer;
+import com.example.home.popularmovies.OnTrailerDataLoadListener;
 import com.example.home.popularmovies.R;
 
 import org.json.JSONArray;
@@ -33,6 +28,11 @@ public class FetchTrailersTask extends AsyncTask<String,Void,ArrayList<Trailer>>
     private DetailActivityFragment detailActivityFragment;
     private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
 
+
+private OnTrailerDataLoadListener listener;
+    public void setOnTrailerLoad(OnTrailerDataLoadListener listener){
+        this.listener = listener;
+    }
     public FetchTrailersTask(DetailActivityFragment detailActivityFragment) {
         this.detailActivityFragment = detailActivityFragment;
     }
@@ -151,40 +151,11 @@ public class FetchTrailersTask extends AsyncTask<String,Void,ArrayList<Trailer>>
 
     @Override
     protected void onPostExecute(ArrayList<Trailer> results) {
-        detailActivityFragment.tLinearLayout.removeAllViews();
-        LayoutInflater inflater = (LayoutInflater) detailActivityFragment.
-                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        if (results != null && !results.isEmpty()) {
-
-            for (final Trailer trailers : results) {
-                View view = inflater.inflate(R.layout.list_item_movie_trailer,null);
-                TextView textView = (TextView) view.findViewById(R.id.list_item_trailer_name);
-                textView.setText(trailers.getTrailerName());
-//                Log.v(LOG_TAG,"trailer name :" + trailers.getTrailerSource());
-//        to play the trailer
-                ImageView play = (ImageView)view.findViewById(R.id.imgPlay);
-                play.setOnClickListener(new View.OnClickListener() {
-                    String source = trailers.getTrailerSource();
-                    @Override
-                    public void onClick(View v) {
-                        detailActivityFragment.startActivity(new Intent(Intent.
-                                ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v="+source)));
-                    }
-                });
-
-                detailActivityFragment.tLinearLayout.addView(view);
-
-            }
-
-        }else {
-            View view = inflater.inflate(R.layout.list_item_movie_trailer,null);
-            TextView textView = (TextView)view.findViewById(R.id.list_item_trailer_name);
-            textView.setText("Sorry no trailers for this movie  :( ");
-            ImageView imageView = (ImageView)view.findViewById(R.id.imgPlay);
-            imageView.setVisibility(view.GONE);
-            detailActivityFragment.tLinearLayout.addView(view);
+        if (results!=null){
+            listener.onTrailerDataReady(results);
         }
+
+
 
 
     }

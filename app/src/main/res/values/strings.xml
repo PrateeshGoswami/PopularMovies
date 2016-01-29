@@ -1,21 +1,22 @@
 <resources>
     <string name="app_name">PopularMovies</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="sorting_pref">Preferences</string>
     <string name="action_settings">Settings</string>
     <string name="api_key"></string>
     <string name="title_activity_settings">SettingsActivity</string>
-    <string name="sorting_pref">Sorting Preferences</string>
-    <string name="description_star">Favorite Star</string>
+
 
     <string name="trailers_header">Trailers</string>
     <string name="reviews_header">Reviews</string>
     <!-- Sorting Options Values-->
     <string name="pref_sort_popularity_desc" translatable="false">popularity.desc</string>
     <string name="pref_sort_vote_average_desc" translatable="false">vote_average.desc</string>
+    <string name="pref_sort_favourite_desc" translatable="false">favourite</string>
 
     <!-- Sorting Options Labels-->
     <string name="pref_sort_popularity_desc_label">By Popularity</string>
     <string name="pref_sort_vote_average_desc_label">By User Ratings</string>
+    <string name="pref_sort_favourite_label">Favourites</string>
 
     <!-- Preferences' Keys and defaults -->
     <string name="pref_movie_sorting_key">movie_sorting_key</string>

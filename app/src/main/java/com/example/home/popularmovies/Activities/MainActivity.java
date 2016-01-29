@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                     MainActivity.this.getSharedPreferences("Data", 0);
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("Status_Size ",movieIdList.size());
 
             for (int i = 0; i < movieIdList.size(); i++) {
 
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         }else {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("favmovieId",movieID);
+            startActivity(intent);
         }
 
     }

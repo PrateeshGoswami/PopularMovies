@@ -3,9 +3,13 @@
     <string-array name="pref_movies_sorting_values">
         <item>@string/pref_sort_vote_average_desc</item>
         <item>@string/pref_sort_popularity_desc</item>
+        <item>@string/pref_sort_favourite_desc</item>
+
     </string-array>
     <string-array name="pref_movies_sorting_labels">
         <item>@string/pref_sort_vote_average_desc_label</item>
         <item>@string/pref_sort_popularity_desc_label</item>
+        <item>@string/pref_sort_favourite_label</item>
+
     </string-array>
 </resources>

@@ -18,10 +18,15 @@ import com.example.home.popularmovies.fetchingData.FetchMoviesTask;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
+    @Bind(R.id.movies_grid)
+    GridView gridView;
 
 
     public MoviesAdapter moviesAdapter;
@@ -49,8 +54,24 @@ public class MainActivityFragment extends Fragment {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortingOrder = sharedPref.getString(getString(R.string.pref_movie_sorting_key),
                 getString(R.string.pref_movie_sorting_default));
+        switch (sortingOrder) {
+            case "popularity.desc":
+                fetchMovieTask.execute(sortingOrder);
+                break;
+            case "vote_average.desc":
+                fetchMovieTask.execute(sortingOrder);
+                break;
+            case "favourite":
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", 0);
+                int size = sharedPreferences.getInt("Status_Size", 0);
+                for (int i = 0; i < size; i++) {
+                    String string = sharedPreferences.getString("Status_" + i, null);
 
-        fetchMovieTask.execute(sortingOrder);
+                }
+
+
+        }
+
 
     }
 
@@ -73,8 +94,9 @@ public class MainActivityFragment extends Fragment {
                         moviesList);
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, view);
 
-        GridView gridView = (GridView) view.findViewById(R.id.movies_grid);
+
         gridView.setAdapter(moviesAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -82,7 +104,7 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = (Movie) parent.getItemAtPosition(position);
                 String movieID = movie.getId();
-                ((Callback)getActivity()).onItemSelected(movieID);
+                ((Callback) getActivity()).onItemSelected(movieID);
 
             }
         });
@@ -97,8 +119,7 @@ public class MainActivityFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    public interface Callback
-    {
+    public interface Callback {
         public void onItemSelected(String movieID);
     }
 

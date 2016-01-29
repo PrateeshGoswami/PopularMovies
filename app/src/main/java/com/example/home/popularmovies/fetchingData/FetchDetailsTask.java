@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.home.popularmovies.Fragments.DetailActivityFragment;
 import com.example.home.popularmovies.Models.Movie;
+import com.example.home.popularmovies.OnDetailDataLoadListener;
 import com.example.home.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +26,11 @@ import java.net.URL;
 public class FetchDetailsTask extends AsyncTask<String, Void, Movie> {
     private DetailActivityFragment detailActivityFragment;
     private final String LOG_TAG = FetchDetailsTask.class.getSimpleName();
+    private OnDetailDataLoadListener listener;
+
+    public void setOnloadfinishedlistener(OnDetailDataLoadListener listener){
+        this.listener = listener;
+    }
 
     public FetchDetailsTask(DetailActivityFragment detailActivityFragment) {
         this.detailActivityFragment = detailActivityFragment;
@@ -148,21 +154,29 @@ public class FetchDetailsTask extends AsyncTask<String, Void, Movie> {
         }
         return null;
     }
+
     @Override
     public void onPostExecute(Movie result) {
-        if (result != null) {
-            String releaseDate = result.getReleaseDate();
-            int separatorIndex = releaseDate.indexOf('-');
-            String releaseYear = releaseDate.substring(0, separatorIndex);
+                if (result != null) {
 
-            detailActivityFragment.mTitleTextView.setText(result.getOriginalTitle());
-            detailActivityFragment.mReleaseYearTextView.setText(releaseYear);
-            detailActivityFragment.mDurationTextView.setText(result.getDuration() + "min");
-            detailActivityFragment.mRatingsTextView.setText(result.getRating() + "/10.0");
-            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
-            detailActivityFragment.mPosterImageTextView.setImageBitmap(result.getPosterImage());
-            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
-        }
+
+                    listener.onDataReady(result);
+                }
+
+
+//        if (result != null) {
+//            String releaseDate = result.getReleaseDate();
+//            int separatorIndex = releaseDate.indexOf('-');
+//            String releaseYear = releaseDate.substring(0, separatorIndex);
+//
+//            detailActivityFragment.mTitleTextView.setText(result.getOriginalTitle());
+//            detailActivityFragment.mReleaseYearTextView.setText(releaseYear);
+//            detailActivityFragment.mDurationTextView.setText(result.getDuration() + "min");
+//            detailActivityFragment.mRatingsTextView.setText(result.getRating() + "/10.0");
+//            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
+//            detailActivityFragment.mPosterImageTextView.setImageBitmap(result.getPosterImage());
+//            detailActivityFragment.mOverviewTextView.setText(result.getSynopsis());
+//        }
     }
 
 }

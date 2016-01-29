@@ -25,7 +25,7 @@
             android:name=".Activities.SettingsActivity"
             android:allowBackup="true"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait" >
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.MainActivity" />
