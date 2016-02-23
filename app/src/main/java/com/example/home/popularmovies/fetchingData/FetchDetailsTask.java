@@ -47,6 +47,7 @@ public class FetchDetailsTask extends AsyncTask<String, Void, Movie> {
         final String VOTE_AVERAGE = "vote_average";
         final String RELEASE_DATE = "release_date";
         final String RUNTIME = "runtime";
+        final String ID = "id";
 
         JSONObject root = new JSONObject(movieInfoJsonStr);
         Movie movie = new Movie();
@@ -56,6 +57,7 @@ public class FetchDetailsTask extends AsyncTask<String, Void, Movie> {
         movie.setOriginalTitle(root.getString(ORIGINAL_TITLE));
         movie.setReleaseDate(root.getString(RELEASE_DATE));
         movie.setDuration(root.getString(RUNTIME));
+        movie.setId(root.getString(ID));
 
 
         String poster_path = Uri.parse("http://image.tmdb.org/t/p/w185").buildUpon()

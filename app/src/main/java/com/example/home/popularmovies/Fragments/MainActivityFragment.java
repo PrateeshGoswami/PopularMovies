@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.home.popularmovies.Adapters.MoviesAdapter;
+import com.example.home.popularmovies.Models.FavMovie;
 import com.example.home.popularmovies.Models.Movie;
 import com.example.home.popularmovies.R;
 import com.example.home.popularmovies.fetchingData.FetchMoviesTask;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -27,16 +30,12 @@ import butterknife.ButterKnife;
 public class MainActivityFragment extends Fragment {
     @Bind(R.id.movies_grid)
     GridView gridView;
-
-
     public MoviesAdapter moviesAdapter;
     private ArrayList<Movie> moviesList;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-// if the activity pauses no need to make the network call
         if (savedInstanceState == null || !savedInstanceState.containsKey("movie_key")) {
             moviesList = new ArrayList();
         } else {
@@ -44,7 +43,6 @@ public class MainActivityFragment extends Fragment {
         }
         setHasOptionsMenu(true);
     }
-
 
     public MainActivityFragment() {
     }
@@ -62,17 +60,19 @@ public class MainActivityFragment extends Fragment {
                 fetchMovieTask.execute(sortingOrder);
                 break;
             case "favourite":
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Data", 0);
-                int size = sharedPreferences.getInt("Status_Size", 0);
+                moviesAdapter.clear();
+                SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
+                int size = mPrefs.getInt("DataSize", 0);
                 for (int i = 0; i < size; i++) {
-                    String string = sharedPreferences.getString("Status_" + i, null);
-
+                    Gson gson = new Gson();
+                    String json = mPrefs.getString("favMovie" + i, "");
+                    FavMovie favMovie = gson.fromJson(json, FavMovie.class);
+                    Movie movie = new Movie();
+                    movie.setPosterURL(favMovie.getPosterURL());
+                    movie.setId(favMovie.getId());
+                    moviesAdapter.add(movie);
                 }
-
-
         }
-
-
     }
 
     //on start movie list will be updated
@@ -85,33 +85,23 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // The ArrayAdapter will take data from a source and
-        // use it to populate the ListView it's attached to.
-
         moviesAdapter =
                 new MoviesAdapter(
                         getActivity(),
                         moviesList);
-
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
-
-
         gridView.setAdapter(moviesAdapter);
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = (Movie) parent.getItemAtPosition(position);
                 String movieID = movie.getId();
                 ((Callback) getActivity()).onItemSelected(movieID);
-
             }
         });
-
         return view;
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -122,6 +112,5 @@ public class MainActivityFragment extends Fragment {
     public interface Callback {
         public void onItemSelected(String movieID);
     }
-
 }
 
