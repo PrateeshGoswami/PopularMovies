@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import com.example.home.popularmovies.fetchingData.FetchMoviesTask;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,16 +62,17 @@ public class MainActivityFragment extends Fragment {
             case "favourite":
                 moviesAdapter.clear();
                 SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
-                int size = mPrefs.getInt("DataSize", 0);
-                for (int i = 0; i < size; i++) {
-                    Gson gson = new Gson();
-                    String json = mPrefs.getString("favMovie" + i, "");
-                    FavMovie favMovie = gson.fromJson(json, FavMovie.class);
-                    Movie movie = new Movie();
-                    movie.setPosterURL(favMovie.getPosterURL());
-                    movie.setId(favMovie.getId());
-                    moviesAdapter.add(movie);
-                }
+                Map<String,?> keys = mPrefs.getAll();
+                for (Map.Entry<String,?> entry: keys.entrySet()) {
+                Gson gson = new Gson();
+                String json = mPrefs.getString(entry.getKey(), "");
+                FavMovie favMovie = gson.fromJson(json, FavMovie.class);
+                Movie movie = new Movie();
+                movie.setPosterURL(favMovie.getPosterURL());
+                movie.setId(favMovie.getId());
+                moviesAdapter.add(movie);
+            }
+
         }
     }
 

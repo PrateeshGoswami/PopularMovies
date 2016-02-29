@@ -10,11 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.home.popularmovies.Models.FavMovie;
 import com.example.home.popularmovies.Models.Movie;
@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,7 +45,8 @@ import me.grantland.widget.AutofitTextView;
 public class DetailActivityFragment extends Fragment implements OnDetailDataLoadListener, OnReviewDataLoadListener, OnTrailerDataLoadListener {
 
     FavMovie favMovie = new FavMovie();
-    ArrayList<FavMovie> favMovieArrayList = new ArrayList<FavMovie>();
+    String favMovieid;
+
     private String movieID;
     @Bind(R.id.titleTextView)
     public AutofitTextView mTitleTextView;
@@ -62,88 +64,117 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
     public LinearLayout mLinearLayout;
     @Bind(R.id.containerForTrailers)
     public LinearLayout tLinearLayout;
+    @Bind(R.id.star)
+    public CheckBox checkBox;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     public DetailActivityFragment() {
     }
+
     public void getMovieInfo(String movieID) {
         FetchDetailsTask movieInfoTask = new FetchDetailsTask(this);
         movieInfoTask.setOnloadfinishedlistener(this);
         movieInfoTask.execute(movieID);
     }
+
     public void getReviews(String movieID) {
         FetchReviewsTask reviewTask = new FetchReviewsTask(this);
         reviewTask.setOnDataLoadFinished(this);
         reviewTask.execute(movieID);
     }
+
     public void getTrailers(String movieID) {
         FetchTrailersTask trailersTask = new FetchTrailersTask(this);
         trailersTask.setOnTrailerLoad(this);
         trailersTask.execute(movieID);
     }
+
     public void updatedetailFragment() {
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             String movieID = intent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.d("test", "at update id is" + movieID);
+            favMovieid = movieID;
+
             getMovieInfo(movieID);
             getReviews(movieID);
             getTrailers(movieID);
         }
     }
+
     public void updateForTwoPane(String movieID) {
         getMovieInfo(movieID);
         getReviews(movieID);
         getTrailers(movieID);
     }
+
     @Override
     public void onStart() {
+
         super.onStart();
         updatedetailFragment();
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("favMoviedata", 0);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+
+        Map<String, ?> keys = sharedPreferences.getAll();
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
+
+            Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
+            prefsEditor.putString("favMovie" + favMovieid, entry.getValue().toString());
+
+
+            if (entry.getKey().contains(favMovieid)) {
+                checkBox.setChecked(true);
+            }
+        }
+
+
     }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle arguments = getArguments();
         if (arguments != null) {
             movieID = arguments.getString("movieid");
+            favMovieid = movieID;
+
         }
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
         updateForTwoPane(movieID);
-        Button button = (Button) rootView.findViewById(R.id.favButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata",0);
-                int size = mPrefs.getInt("DataSize",0);
-                for (int i = 0;i< size;i++){
-                    Gson gson = new Gson();
-                    String json = mPrefs.getString("favMovie" + i, "");
-                    FavMovie favMovie = gson.fromJson(json,FavMovie.class);
-                    favMovieArrayList.add(favMovie);
-                }
-                if (favMovieArrayList.contains(favMovie)) {
-                    Toast.makeText(getActivity(), "This Movie is already your favourite !!! =)",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    favMovieArrayList.add(favMovie);
-                }
-                SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                prefsEditor.putInt("DataSize", favMovieArrayList.size());
 
-                for (int i =0;i<favMovieArrayList.size();i++) {
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
+                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
                     Gson gson = new Gson();
-                    String json = gson.toJson(favMovieArrayList.get(i));
-                    prefsEditor.putString("favMovie" + i, json);
+                    String json = gson.toJson(favMovie);
+                    prefsEditor.putString("favMovie" + favMovieid, json);
+                    prefsEditor.commit();
+
+
+                } else {
+                    SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
+                    SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                    prefsEditor.remove("favMovie" + favMovieid);
+                    prefsEditor.commit();
+
                 }
-                prefsEditor.commit();
+
             }
         });
         return rootView;
     }
+
     @Override
     public void onDataReady(Movie result) {
         String releaseDate = result.getReleaseDate();
@@ -194,6 +225,7 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
                 ImageView play = (ImageView) view.findViewById(R.id.imgPlay);
                 play.setOnClickListener(new View.OnClickListener() {
                     String source = trailers.getTrailerSource();
+
                     @Override
                     public void onClick(View v) {
                         startActivity(new Intent(Intent.

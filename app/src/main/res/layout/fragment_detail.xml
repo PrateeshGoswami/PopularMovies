@@ -79,15 +79,18 @@
                     android:textColor="#000000" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/favButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
 
+            <CheckBox
+                            android:id="@+id/star"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top"
+                            android:paddingRight="10dp"
+                            android:checked="false"
+                            android:button="@drawable/star"
+                            android:contentDescription="@string/description_star"
+                            />
 
-                android:text="Mark Favorite"
-                android:paddingRight="10dp" />
 
         </LinearLayout>
 
