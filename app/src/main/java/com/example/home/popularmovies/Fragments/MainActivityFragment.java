@@ -12,11 +12,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.home.popularmovies.Adapters.MoviesAdapter;
-import com.example.home.popularmovies.Models.FavMovie;
 import com.example.home.popularmovies.Models.Movie;
 import com.example.home.popularmovies.R;
 import com.example.home.popularmovies.fetchingData.FetchMoviesTask;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -62,16 +60,15 @@ public class MainActivityFragment extends Fragment {
             case "favourite":
                 moviesAdapter.clear();
                 SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
-                Map<String,?> keys = mPrefs.getAll();
-                for (Map.Entry<String,?> entry: keys.entrySet()) {
-                Gson gson = new Gson();
-                String json = mPrefs.getString(entry.getKey(), "");
-                FavMovie favMovie = gson.fromJson(json, FavMovie.class);
-                Movie movie = new Movie();
-                movie.setPosterURL(favMovie.getPosterURL());
-                movie.setId(favMovie.getId());
-                moviesAdapter.add(movie);
-            }
+                Map<String, ?> keys = mPrefs.getAll();
+                for (Map.Entry<String, ?> entry : keys.entrySet()) {
+                    String id = entry.getKey();
+                    String url = entry.getValue().toString();
+                    Movie movie = new Movie();
+                    movie.setPosterURL(url);
+                    movie.setId(id);
+                    moviesAdapter.add(movie);
+                }
 
         }
     }

@@ -27,7 +27,6 @@ import com.example.home.popularmovies.R;
 import com.example.home.popularmovies.fetchingData.FetchDetailsTask;
 import com.example.home.popularmovies.fetchingData.FetchReviewsTask;
 import com.example.home.popularmovies.fetchingData.FetchTrailersTask;
-import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
@@ -46,6 +45,7 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
 
     FavMovie favMovie = new FavMovie();
     String favMovieid;
+    String favUrl;
 
     private String movieID;
     @Bind(R.id.titleTextView)
@@ -118,16 +118,11 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
         updatedetailFragment();
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("favMoviedata", 0);
-        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
 
         Map<String, ?> keys = sharedPreferences.getAll();
         for (Map.Entry<String, ?> entry : keys.entrySet()) {
-
             Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
-            prefsEditor.putString("favMovie" + favMovieid, entry.getValue().toString());
-
-
-            if (entry.getKey().contains(favMovieid)) {
+            if (entry.getKey().equals(favMovieid)) {
                 checkBox.setChecked(true);
             }
         }
@@ -156,16 +151,14 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
                 if (isChecked) {
                     SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                    Gson gson = new Gson();
-                    String json = gson.toJson(favMovie);
-                    prefsEditor.putString("favMovie" + favMovieid, json);
+                    prefsEditor.putString(favMovieid,favUrl);
                     prefsEditor.commit();
 
 
                 } else {
                     SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                    prefsEditor.remove("favMovie" + favMovieid);
+                    prefsEditor.remove(favMovieid);
                     prefsEditor.commit();
 
                 }
@@ -188,6 +181,7 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
         mPosterImageTextView.setImageBitmap(result.getPosterImage());
         favMovie.setPosterURL(result.getPosterURL());
         favMovie.setId(result.getId());
+        favUrl = result.getPosterURL();
     }
 
     @Override
