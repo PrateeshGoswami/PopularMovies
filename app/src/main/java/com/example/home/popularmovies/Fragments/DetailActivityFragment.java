@@ -91,6 +91,11 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
     @Override
     public void onResume() {
         super.onResume();
+        String releaseDate = movie.getReleaseDate();
+//        int separatorIndex = releaseDate.indexOf('-');
+//        String releaseYear = releaseDate.substring(0, separatorIndex);
+        mReleaseYearTextView.setText(releaseDate);
+
         mTitleTextView.setText(movie.getOriginalTitle());
         mPosterImageTextView.setImageBitmap(movie.getPosterImage());
         mDurationTextView.setText(movie.getDuration() + "min");
