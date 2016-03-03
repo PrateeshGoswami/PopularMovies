@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +47,9 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
     FavMovie favMovie = new FavMovie();
     String favMovieid;
     String favUrl;
+    Movie movie = new Movie();
+    ArrayList<MovieReview> reviewArrayList = new ArrayList<MovieReview>();
+    ArrayList<Trailer> trailerArrayList = new ArrayList<Trailer>();
 
     private String movieID;
     @Bind(R.id.titleTextView)
@@ -70,9 +74,73 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null ) {
+            movie = savedInstanceState.getParcelable("movieDetails");
+            reviewArrayList = savedInstanceState.getParcelableArrayList("reviewsList");
+            trailerArrayList = savedInstanceState.getParcelableArrayList("trailerList");
+            Log.d("testing","onsave" + movie.getOriginalTitle());
+
+
+
+        }
     }
 
     public DetailActivityFragment() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mTitleTextView.setText(movie.getOriginalTitle());
+        mPosterImageTextView.setImageBitmap(movie.getPosterImage());
+        mDurationTextView.setText(movie.getDuration() + "min");
+        mRatingsTextView.setText(movie.getRating() + "/10.0");
+        mOverviewTextView.setText(movie.getSynopsis());
+        LayoutInflater rinflater = (LayoutInflater)
+                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (reviewArrayList != null && !reviewArrayList.isEmpty()) {
+            for (MovieReview movieReview : reviewArrayList) {
+                View view = rinflater.inflate(R.layout.list_item_movie_review, null);
+                TextView textView = (TextView) view.findViewById(R.id.list_item_reviewer_text);
+                textView.setText(movieReview.getStrReviewer());
+                ExpandableTextView textView1 = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
+                textView1.setText(movieReview.getStrReview());
+                mLinearLayout.addView(view);
+            }
+        } else {
+            View view = rinflater.inflate(R.layout.list_item_movie_review, null);
+            TextView textView = (TextView) view.findViewById(R.id.list_item_reviewer_text);
+            textView.setText("Sorry no reviews for this movie  :( ");
+            mLinearLayout.addView(view);
+        }
+        LayoutInflater inflater = (LayoutInflater)
+                getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (trailerArrayList != null && !trailerArrayList.isEmpty()) {
+            for (final Trailer trailers : trailerArrayList) {
+                View view = inflater.inflate(R.layout.list_item_movie_trailer, null);
+                TextView textView = (TextView) view.findViewById(R.id.list_item_trailer_name);
+                textView.setText(trailers.getTrailerName());
+                ImageView play = (ImageView) view.findViewById(R.id.imgPlay);
+                play.setOnClickListener(new View.OnClickListener() {
+                    String source = trailers.getTrailerSource();
+
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.
+                                ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + source)));
+                    }
+                });
+                tLinearLayout.addView(view);
+            }
+        } else {
+            View view = inflater.inflate(R.layout.list_item_movie_trailer, null);
+            TextView textView = (TextView) view.findViewById(R.id.list_item_trailer_name);
+            textView.setText("Sorry no trailers for this movie  :( ");
+            ImageView imageView = (ImageView) view.findViewById(R.id.imgPlay);
+            imageView.setVisibility(view.GONE);
+            tLinearLayout.addView(view);
+        }
+
     }
 
     public void getMovieInfo(String movieID) {
@@ -131,9 +199,16 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (savedInstanceState != null ) {
+
+            movie = savedInstanceState.getParcelable("movieDetails");
+            reviewArrayList = savedInstanceState.getParcelableArrayList("reviewsList");
+            trailerArrayList = savedInstanceState.getParcelableArrayList("trailerList");
+        }
         Bundle arguments = getArguments();
         if (arguments != null) {
             movieID = arguments.getString("movieid");
@@ -151,7 +226,7 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
                 if (isChecked) {
                     SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                    prefsEditor.putString(favMovieid,favUrl);
+                    prefsEditor.putString(favMovieid, favUrl);
                     prefsEditor.commit();
 
 
@@ -166,31 +241,34 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
             }
         });
         return rootView;
+
     }
 
     @Override
     public void onDataReady(Movie result) {
-        String releaseDate = result.getReleaseDate();
+        movie = result;
+        String releaseDate = movie.getReleaseDate();
         int separatorIndex = releaseDate.indexOf('-');
         String releaseYear = releaseDate.substring(0, separatorIndex);
-        mTitleTextView.setText(result.getOriginalTitle());
+        mTitleTextView.setText(movie.getOriginalTitle());
         mReleaseYearTextView.setText(releaseYear);
-        mDurationTextView.setText(result.getDuration() + "min");
-        mRatingsTextView.setText(result.getRating() + "/10.0");
-        mOverviewTextView.setText(result.getSynopsis());
-        mPosterImageTextView.setImageBitmap(result.getPosterImage());
-        favMovie.setPosterURL(result.getPosterURL());
-        favMovie.setId(result.getId());
-        favUrl = result.getPosterURL();
+        mDurationTextView.setText(movie.getDuration() + "min");
+        mRatingsTextView.setText(movie.getRating() + "/10.0");
+        mOverviewTextView.setText(movie.getSynopsis());
+        mPosterImageTextView.setImageBitmap(movie.getPosterImage());
+        favMovie.setPosterURL(movie.getPosterURL());
+        favMovie.setId(movie.getId());
+        favUrl = movie.getPosterURL();
     }
 
     @Override
     public void onDataReady(ArrayList<MovieReview> results) {
+        reviewArrayList = results;
         mLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater)
                 getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (results != null && !results.isEmpty()) {
-            for (MovieReview movieReview : results) {
+        if (reviewArrayList != null && !reviewArrayList.isEmpty()) {
+            for (MovieReview movieReview : reviewArrayList) {
                 View view = inflater.inflate(R.layout.list_item_movie_review, null);
                 TextView textView = (TextView) view.findViewById(R.id.list_item_reviewer_text);
                 textView.setText(movieReview.getStrReviewer());
@@ -208,11 +286,12 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
 
     @Override
     public void onTrailerDataReady(ArrayList<Trailer> results) {
+        trailerArrayList = results;
         tLinearLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater)
                 getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (results != null && !results.isEmpty()) {
-            for (final Trailer trailers : results) {
+        if (trailerArrayList != null && !trailerArrayList.isEmpty()) {
+            for (final Trailer trailers : trailerArrayList) {
                 View view = inflater.inflate(R.layout.list_item_movie_trailer, null);
                 TextView textView = (TextView) view.findViewById(R.id.list_item_trailer_name);
                 textView.setText(trailers.getTrailerName());
@@ -237,5 +316,15 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
             tLinearLayout.addView(view);
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable("movieDetails", movie);
+        outState.putParcelableArrayList("reviewsList", (ArrayList<? extends Parcelable>) reviewArrayList);
+        outState.putParcelableArrayList("trailerList", (ArrayList<? extends Parcelable>) trailerArrayList);
+    }
+
 }
 
