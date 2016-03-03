@@ -188,10 +188,13 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("favMoviedata", 0);
 
         Map<String, ?> keys = sharedPreferences.getAll();
+
         for (Map.Entry<String, ?> entry : keys.entrySet()) {
-            Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
-            if (entry.getKey().equals(favMovieid)) {
-                checkBox.setChecked(true);
+            if (entry.getValue().toString()!=null) {
+                Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
+                if (entry.getKey().equals(favMovieid)) {
+                    checkBox.setChecked(true);
+                }
             }
         }
 
@@ -226,15 +229,17 @@ public class DetailActivityFragment extends Fragment implements OnDetailDataLoad
                 if (isChecked) {
                     SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
-                    prefsEditor.putString(favMovieid, favUrl);
-                    prefsEditor.commit();
+                    if (!mPrefs.contains(favMovieid)) {
+                        prefsEditor.putString(favMovieid, favUrl);
+                        prefsEditor.apply();
+                    }
 
 
                 } else {
                     SharedPreferences mPrefs = getActivity().getSharedPreferences("favMoviedata", 0);
                     SharedPreferences.Editor prefsEditor = mPrefs.edit();
                     prefsEditor.remove(favMovieid);
-                    prefsEditor.commit();
+                    prefsEditor.apply();
 
                 }
 
