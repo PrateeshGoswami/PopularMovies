@@ -24,6 +24,7 @@ As of the current version
 
 When the Application starts it should show the movies in a grid.Movies can be sorted by popularity or user rating from settings
 
-
+![popmovie](https://cloud.githubusercontent.com/assets/13324542/17388523/9e7bb790-59b1-11e6-9ddf-b77a7e61b49d.png)
+![popmovidetail](https://cloud.githubusercontent.com/assets/13324542/17388524/9e7d553c-59b1-11e6-80de-5acd30748243.png)
 
 Contributor :Prateesh Goswami 
