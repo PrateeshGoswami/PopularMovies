@@ -27,5 +27,4 @@ As of the current version
 
 When the Application starts it should show the movies in a grid.Movies can be sorted by popularity or user rating from settings
 
-
-Contributor :Prateesh Goswami 
+ 
